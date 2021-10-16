@@ -1,18 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter_task1/dayOfWeek.dart';
+import 'package:flutter_task1/task.dart';
 import 'package:flutter_task1/todo.dart';
 
-class toDOList implements todo {
-  @override
-  String? content;
-  @override
-  String? category;
-  @override
-  DateTime? dateTime;
-  @override
-  dayOfWeek? dayofweek;
-
+class toDOList implements Task{
   static int Menu() {
     int m;
     do {
@@ -49,30 +40,29 @@ class toDOList implements todo {
     }
   }
 
+  @override
   idtype() {
     print('Type of id: 1- number; 2 - string');
-    int type = int.parse(stdin.readLineSync()!);
-    if (type == 1) {
-      var todos = <int, todo>{};
-      return todos;
-    } else if (type == 2) {
-      var todos = <String, todo>{};
-      return todos;
-    } else {
-      var todos = <int, todo>{};
-      print('Input incorrect number(Selected standart type int)');
-      return todos;
+    try {
+      int type = int.parse(stdin.readLineSync()!);
+      if (type == 1) {
+        var todos = <int, todo>{};
+        return todos;
+      } else if (type == 2) {
+        var todos = <String, todo>{};
+        return todos;
+      } else {
+        var todos = <int, todo>{};
+        print('Input incorrect number(Selected standart type int)');
+        return todos;
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
   void main() {
     var todos = idtype();
-    // if (types.runtimeType == String){
-    //   var todos = <String, todo>{};
-    // }else{
-    //   var todos = <int, todo>{};
-    // }
-
     var menu;
     do {
       menu = Menu();
@@ -92,6 +82,7 @@ class toDOList implements todo {
           output(todos);
           break;
         case 4:
+          categoryes(todos);
           break;
         case 0:
           break;
@@ -108,38 +99,63 @@ class toDOList implements todo {
     }
   }
 
+  void categoryes<T>(Map<T, todo> todos) {
+    var listcat = todos.values.toList();
+
+    Map<String?, int> newcat = {};
+
+    for (var item in listcat) {
+      if (newcat.keys.contains(item.category)) {
+        newcat.update(item.category, (value) => value + 1);
+        //newcat[item.category] = newcat. + 1;
+      } else {
+        newcat[item.category] = 1;
+      }
+    }
+
+    print('category:');
+    for (var item in newcat.entries) {
+      print('Category: ${item.key} repeated : ${item.value} times');
+    }
+    
+  }
+
   void create<T>(Map<T, todo> todos) {
     T id;
+
+    //Map<T, todo> todosnew = Map();
+    var temp;
+
     if (todos.isEmpty) {
-      id = (todos.keys.runtimeType == String ? '1' : 1) as T;
+      id =
+          (todos.keys.runtimeType.toString().contains('String') ? '1' : 1) as T;
     } else {
-      id = ((todos.keys.runtimeType == String)
+      id = ((todos.keys.runtimeType.toString().contains('String'))
           ? (int.parse(todos.keys.last.toString()) + 1).toString()
           : int.parse(todos.keys.last.toString()) + 1) as T;
     }
     try {
-      print('Insert content $id');
-      var cont = stdin.readLineSync();
-      if (cont != null) {
-        content = cont;
-      }
+      print('Insert content for $id todos');
+      var content = stdin.readLineSync();
       print('Insert category');
-      category = stdin.readLineSync();
+      var category = stdin.readLineSync();
       print('Insert date');
-      dateTime = DateTime.parse(stdin.readLineSync()!);
+      var dateTime = DateTime.parse(stdin.readLineSync()!);
       print('Recurring task?(1-yes/2-no)');
       var a = int.parse(stdin.readLineSync()!);
+      var dayofweek;
       if (a == 2) {
-        dayofweek = null;
+        dayofweek = dayOfWeek.none;
       } else {
         dayofweek = repeatmenu();
       }
+
+      temp = todo(content, category, dateTime, dayofweek);
+
+      todos[id] = temp;
     } catch (e) {
       print(e);
     }
-    var temp = todo(content, category, dateTime, dayofweek);
-    //print('Input acces');
-    todos[id] = temp;
   }
 
   dayOfWeek? repeatmenu() {
@@ -164,22 +180,23 @@ class toDOList implements todo {
     return repeat;
   }
 
-  @override
-  void display(List<todo> dol) => print(
-      'Content ${content} content category $category date $dateTime repeat $dayofweek');
+  void display(var item) {
+    print(
+        'Content ${item.content} Category ${item.category} Date ${item.dateTime} Repeat ${item.dayofweek}');
+  }
 
-  void output(Map<int, todo> todos) {
+  void output<T>(Map<T, todo> todos) {
     if (todos.isNotEmpty) {
       for (var item in todos.entries) {
         print('Id = ${item.key}');
-        display(todos.values.toList());
+        display(item.value);
       }
     } else {
       print('Todo list is empty');
     }
   }
 
-  void delete(Map<int, todo> todos) {
+  void delete<T>(Map<T, todo> todos) {
     if (todos.isNotEmpty) {
       output(todos);
       print('Delete with: 1- id\n 2 - content');
