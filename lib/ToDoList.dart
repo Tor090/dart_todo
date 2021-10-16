@@ -11,7 +11,7 @@ class toDOList implements Task{
       m = int.parse(stdin.readLineSync()!);
       //print('cin $m');
       if (m < 0 || m > 4) {
-        print('Даного пункту меню не iснує!');
+        print('This menu item does not exist!');
       }
     } while (m < 0 || m > 4);
     return m;
@@ -22,9 +22,9 @@ class toDOList implements Task{
     do {
       print('\t1.Create one todo\n\t2.Create more then one');
       m = int.parse(stdin.readLineSync()!);
-      print('cin $m');
+
       if (m < 1 || m > 2) {
-        print('Даного пункту меню не iснує!');
+        print('This menu item does not exist!');
       }
     } while (m < 1 || m > 2);
     switch (m) {
@@ -87,7 +87,7 @@ class toDOList implements Task{
         case 0:
           break;
         default:
-          print('Ви ввели помилкове значення! ');
+          print('You entered an incorrect value! ');
           break;
       }
     } while (menu != 0);
@@ -107,23 +107,20 @@ class toDOList implements Task{
     for (var item in listcat) {
       if (newcat.keys.contains(item.category)) {
         newcat.update(item.category, (value) => value + 1);
-        //newcat[item.category] = newcat. + 1;
       } else {
         newcat[item.category] = 1;
       }
     }
-
-    print('category:');
     for (var item in newcat.entries) {
       print('Category: ${item.key} repeated : ${item.value} times');
     }
-    
+    for (var item in newcat.entries) {
+      print('Category: ${item.key} repeated : ${item.value} times');
+    }
   }
 
   void create<T>(Map<T, todo> todos) {
     T id;
-
-    //Map<T, todo> todosnew = Map();
     var temp;
 
     if (todos.isEmpty) {
@@ -149,9 +146,8 @@ class toDOList implements Task{
       } else {
         dayofweek = repeatmenu();
       }
-
       temp = todo(content, category, dateTime, dayofweek);
-
+      temp = todo(content, category, dateTime, dayofweek);
       todos[id] = temp;
     } catch (e) {
       print(e);
@@ -161,7 +157,7 @@ class toDOList implements Task{
   dayOfWeek? repeatmenu() {
     dayOfWeek? repeat;
     print(
-        '1-${dayOfWeek.everyday}\n2-${dayOfWeek.everymonth}\n4-${dayOfWeek.everyweek}\n4-${dayOfWeek.everyyear}');
+        '1-${dayOfWeek.everyday}\n2-${dayOfWeek.everymonth}\n3-${dayOfWeek.everyweek}\n4-${dayOfWeek.everyyear}');
     var rep = int.parse(stdin.readLineSync()!);
     switch (rep) {
       case 1:
@@ -182,6 +178,7 @@ class toDOList implements Task{
 
   void display(var item) {
     print(
+        'Content ${item.content} Category ${item.category} Date ${item.dateTime} Repeat ${item.dayofweek.toString()}');
         'Content ${item.content} Category ${item.category} Date ${item.dateTime} Repeat ${item.dayofweek}');
   }
 
@@ -197,26 +194,17 @@ class toDOList implements Task{
   }
 
   void delete<T>(Map<T, todo> todos) {
+    var m;
     if (todos.isNotEmpty) {
       output(todos);
-      print('Delete with: 1- id\n 2 - content');
-      int m = int.parse(stdin.readLineSync()!);
-      var z;
-      switch (m) {
-        case 1:
-          print('Insert id:');
-          z = int.parse(stdin.readLineSync()!);
-          todos.remove(m);
-          break;
-        case 2:
-          print('Insert content:');
-          z = stdin.readLineSync()!;
-          todos.remove(z);
-          break;
-        default:
-          print('Inserted value incorrect');
-          break;
+      if (todos.keys.runtimeType.toString().contains('String')) {
+        print('Enter id:');
+        m = stdin.readLineSync()!;
+      } else {
+        print('Enter id:');
+        m = int.parse(stdin.readLineSync()!);
       }
+      todos.remove(m);
     } else {
       print('Todo list is empty');
     }
