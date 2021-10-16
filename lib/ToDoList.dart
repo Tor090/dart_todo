@@ -3,7 +3,7 @@ import 'package:flutter_task1/dayOfWeek.dart';
 import 'package:flutter_task1/task.dart';
 import 'package:flutter_task1/todo.dart';
 
-class toDOList implements Task {
+class toDOList implements Task{
   static int Menu() {
     int m;
     do {
@@ -111,7 +111,9 @@ class toDOList implements Task {
         newcat[item.category] = 1;
       }
     }
-
+    for (var item in newcat.entries) {
+      print('Category: ${item.key} repeated : ${item.value} times');
+    }
     for (var item in newcat.entries) {
       print('Category: ${item.key} repeated : ${item.value} times');
     }
@@ -145,6 +147,7 @@ class toDOList implements Task {
         dayofweek = repeatmenu();
       }
       temp = todo(content, category, dateTime, dayofweek);
+      temp = todo(content, category, dateTime, dayofweek);
       todos[id] = temp;
     } catch (e) {
       print(e);
@@ -176,6 +179,7 @@ class toDOList implements Task {
   void display(var item) {
     print(
         'Content ${item.content} Category ${item.category} Date ${item.dateTime} Repeat ${item.dayofweek.toString()}');
+        'Content ${item.content} Category ${item.category} Date ${item.dateTime} Repeat ${item.dayofweek}');
   }
 
   void output<T>(Map<T, todo> todos) {
