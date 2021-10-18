@@ -10,7 +10,7 @@ class toDOList {
     do {
       print('\t1.Create todo\n\t2.Delete todo\n\t3.See all.\n\t4.Category.');
       m = int.parse(stdin.readLineSync()!);
-      //print('cin $m');
+      
       if (m < 0 || m > 4) {
         print('This menu item does not exist!');
       }
@@ -43,13 +43,6 @@ class toDOList {
 
   void main() {
     var todos = <int, Task>{};
-    // print('Recurring task?(1-yes/2-no)');
-    // var a = int.parse(stdin.readLineSync()!);
-    // if (a == 1) {
-    //   todos = <int, RecurringTask>{};
-    // } else {
-    //   todos = <int, todo>{};
-    // }
     var menu;
     do {
       menu = Menu();
